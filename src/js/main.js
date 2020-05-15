@@ -1,4 +1,4 @@
-import '../main.css';
+import '../css/main.css';
 import Board from './Game/app';
 import cards from './data/cards';
 

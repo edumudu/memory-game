@@ -1,0 +1,79 @@
+@import url('./variables.css');
+@import url('./keyframes.css');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html, body { height: 100%; }
+
+body {
+  font-size: 16px;
+  color: #2b2b2b;
+}
+
+#board {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  perspective: 1000px;
+  padding: 100px 30px;
+}
+
+.scoreboard {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.scoreboard .hits,
+.scoreboard .erros {
+  padding: 10px 15px;
+  margin-top: 10px;
+  border-radius: 15px;
+  color: #fff;
+}
+
+.scoreboard .hits.change,
+.scoreboard .erros.change {
+  animation: grow_balance .6s;
+}
+
+.scoreboard .hits {
+  background-color: var(--green);
+}
+
+.scoreboard .erros {
+  background-color: var(--red);
+}
+
+.card {
+  position: relative;
+  width: 150px;
+  height: 250px;
+  margin: 10px;
+  border-radius: 15px;
+  transform-style: preserve-3d;
+  transition: transform 0.4s;
+}
+
+.card:active { transform: scale(.9); }
+.card:hover { cursor: pointer; }
+.card.active { transform: rotateY(180deg); }
+
+.card .face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  backface-visibility: hidden;
+  background-color: #fff;
+}
+
+.card .front {
+  transform: rotateY(180deg);
+}

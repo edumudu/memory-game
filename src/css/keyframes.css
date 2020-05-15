@@ -1,0 +1,13 @@
+@keyframes grow_balance {
+  from {
+    transform: scale(0.9) rotate(-10deg);
+  }
+  
+  80% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  
+  to {
+    transform: scale(1) rotate(0deg);
+  }
+}

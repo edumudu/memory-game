@@ -8,10 +8,10 @@ class Card {
   }
 
   constructor(card, id) {
-    this.#id = id
+    this.#id = id;
     this.#el = document.createElement('div');
-    this.#imgs.front = card.front || ''
-    
+    this.#imgs.front = card.front || '';
+
     this.initCard()
   }
 
@@ -19,12 +19,13 @@ class Card {
     return this.#el;
   }
 
-  addClick(callback) {
-    this.#el.addEventListener('click', callback);
+  click() {
+    const e = new CustomEvent('cardFlip', { detail: this });
+    document.dispatchEvent(e);
   }
 
-  removeClick(callback) {
-    this.#el.removeEventListener('click', callback);
+  removeClick() {
+    this.#el.removeEventListener('click', this.click);
   }
 
   set fliped (val) {
@@ -54,7 +55,6 @@ class Card {
   }
 
   initCard() {
-    this.#el.dataset.id = this.#id;
     this.#el.classList.add('card');
 
     const front = document.createElement('img');
@@ -68,6 +68,8 @@ class Card {
 
     this.#el.appendChild(front);
     this.#el.appendChild(back);
+
+    this.#el.addEventListener('click', this.click);
   }
 
 }

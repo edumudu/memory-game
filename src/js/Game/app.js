@@ -1,8 +1,9 @@
 import Card from './Card'
+import Scoreboard from './Scoreboard'
 
 class Board {
   #locked = false;
-  #mathes = 0;
+  #scoreboard;
   #cards = [];
   #board;
   #isActive = {
@@ -13,6 +14,8 @@ class Board {
   constructor(el, cards = []) {
     this.#cards = cards;
     this.#board = el;
+
+    this.initScoreBoard();
   }
 
   set cards(cards) {
@@ -35,9 +38,20 @@ class Board {
     this.#cards = cards.flat();
     this.shuffle();
 
-    this.#cards.forEach(card => card.addClick(() => { this.clickInCard(card) }))
+    // this.#cards.forEach(card => card.addClick(() => this.clickInCard(card)));
+    document.addEventListener('cardFlip', e => this.clickInCard(e.detail))
 
     this.insertCardsInBoard();
+  }
+
+  initScoreBoard() {
+    const scoreboard = document.createElement('div');
+
+    scoreboard.classList.add('scoreboard');
+
+    this.#scoreboard = new Scoreboard(scoreboard);
+
+    this.#board.appendChild(this.#scoreboard.el);
   }
 
   insertCardsInBoard() {
@@ -46,9 +60,10 @@ class Board {
 
   clickInCard(card) {
     if(this.#locked) return
-    if(this.#isActive.first === card) return
 
-    console.log(this.#isActive.first)
+    card = this.#cards.find(c => c.toNode() === card);
+
+    if(this.#isActive.first === card) return
 
     card.flip();
 
@@ -66,25 +81,28 @@ class Board {
   checkForMatch() {
     const isMatch = this.#isActive.first.id === this.#isActive.second.id
 
-    isMatch ? this.disableCards() : this.unflipActives();
+    isMatch ? this.disableCards() : this.unflipCards();
   }
 
   disableCards() {
-    this.#isActive.first.removeClick(this.clickInCard);
-    this.#isActive.second.removeClick(this.clickInCard);
+    this.incrementMatches();
+
+    this.#isActive.first.removeClick(() => this.clickInCard(this.#isActive.first));
+    this.#isActive.second.removeClick(() => this.clickInCard(this.#isActive.second));
 
     this.resetBoard()
   }
 
-  unflipActives() {
+  unflipCards() {
     this.#locked = true;
+    this.#scoreboard.error++;
 
     setTimeout(() => {
       this.#isActive.first.unflip();
       this.#isActive.second.unflip();
 
       this.resetBoard();
-    }, 1000)
+    }, 800)
   }
 
   resetBoard() {
@@ -94,6 +112,10 @@ class Board {
     };
 
     this.#locked = false;
+  }
+
+  incrementMatches() {
+    this.#scoreboard.hits++;
   }
 
 }
