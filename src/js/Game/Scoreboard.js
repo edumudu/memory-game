@@ -60,6 +60,11 @@ class Scoreboard {
     scoreboard.appendChild(hits);
     scoreboard.appendChild(error);
   }
+
+  reset() {
+    this.hits = 0;
+    this.error = 0;
+  }
 }
 
 export default Scoreboard;

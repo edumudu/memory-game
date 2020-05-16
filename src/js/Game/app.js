@@ -6,6 +6,9 @@ class Board {
   #scoreboard;
   #cards = [];
   #board;
+  #wonCallback;
+  #timeout;
+  #loseCallback;
   #isActive = {
     first: null,
     second: null
@@ -14,20 +17,23 @@ class Board {
   constructor(el, cards = []) {
     this.#cards = cards;
     this.#board = el;
-
-    this.initScoreBoard();
   }
 
   set cards(cards) {
     this.#cards = cards;
   }
 
-  shuffle() {
-    this.#cards.forEach(card => {
-      const randomNumber = Math.floor(Math.random() * 12);
+  set wonCallback(callback) {
+    this.#wonCallback = callback;
+  }
 
-      card.order = randomNumber;
-    })
+  set loseCallback(callback) {
+    this.#loseCallback = callback;
+  }
+
+  initGame() {
+    this.initScoreBoard();
+    this.initCards();
   }
 
   initCards() {
@@ -38,7 +44,6 @@ class Board {
     this.#cards = cards.flat();
     this.shuffle();
 
-    // this.#cards.forEach(card => card.addClick(() => this.clickInCard(card)));
     document.addEventListener('cardFlip', e => this.clickInCard(e.detail))
 
     this.insertCardsInBoard();
@@ -54,8 +59,20 @@ class Board {
     this.#board.appendChild(this.#scoreboard.el);
   }
 
+  shuffle() {
+    this.#cards.forEach(card => {
+      const randomNumber = Math.floor(Math.random() * this.#cards.length);
+
+      card.order = randomNumber;
+    })
+  }
+
   insertCardsInBoard() {
     this.#cards.forEach(card => this.#board.appendChild(card.toNode()));
+  }
+
+  removeCardsFromBoard() {
+    this.#cards.forEach(card => this.#board.removeChild(card.toNode()));
   }
 
   clickInCard(card) {
@@ -81,12 +98,18 @@ class Board {
   checkForMatch() {
     const isMatch = this.#isActive.first.id === this.#isActive.second.id
 
-    isMatch ? this.disableCards() : this.unflipCards();
+    if(isMatch) {
+      this.disableCards();
+      this.incrementMatches();
+      this.checkIfWon();
+    } else {
+      this.unflipCards();
+      this.incrementErrors();
+      this.checkIfLose();
+    };
   }
 
   disableCards() {
-    this.incrementMatches();
-
     this.#isActive.first.removeClick(() => this.clickInCard(this.#isActive.first));
     this.#isActive.second.removeClick(() => this.clickInCard(this.#isActive.second));
 
@@ -95,9 +118,8 @@ class Board {
 
   unflipCards() {
     this.#locked = true;
-    this.#scoreboard.error++;
 
-    setTimeout(() => {
+    this.#timeout = setTimeout(() => {
       this.#isActive.first.unflip();
       this.#isActive.second.unflip();
 
@@ -114,10 +136,44 @@ class Board {
     this.#locked = false;
   }
 
+  resetGame() {
+    this.resetBoard();
+    this.resetAllCards();
+    this.#scoreboard.reset();
+  }
+
+  resetAllCards() {
+    this.removeCardsFromBoard();
+    this.shuffle();
+    this.insertCardsInBoard();
+    this.#cards.forEach(card => card.unflip());
+    this.#cards.forEach(card => card.removeClick());
+    this.#cards.forEach(card => card.addClick());
+  }
+
   incrementMatches() {
     this.#scoreboard.hits++;
   }
 
+  incrementErrors() {
+    this.#scoreboard.error++;
+  }
+
+  checkIfWon() {
+    if(this.#cards.length / 2 === this.#scoreboard.hits) {
+      clearTimeout(this.#timeout);
+      this.#locked = true;
+      this.#wonCallback();
+    }
+  }
+
+  checkIfLose() {
+    if(this.#scoreboard.error >= 10) {
+      clearTimeout(this.#timeout);
+      this.#locked = true;
+      this.#loseCallback();
+    }
+  }
 }
 
 export default Board;

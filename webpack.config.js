@@ -42,7 +42,7 @@ module.exports = {
         new HTMLWebpackPlugin({
             template: path.resolve(__dirname, PUBLIC_DIR, 'index.html')
         }),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
     ],
     target: 'web'
 }

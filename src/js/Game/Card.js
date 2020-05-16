@@ -4,7 +4,7 @@ class Card {
   #el;
   #imgs = {
     front: '',
-    back: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Card_back_02.svg/412px-Card_back_02.svg.png'
+    back: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Card_back_10.svg/800px-Card_back_10.svg.png'
   }
 
   constructor(card, id) {
@@ -13,19 +13,6 @@ class Card {
     this.#imgs.front = card.front || '';
 
     this.initCard()
-  }
-
-  toNode() {
-    return this.#el;
-  }
-
-  click() {
-    const e = new CustomEvent('cardFlip', { detail: this });
-    document.dispatchEvent(e);
-  }
-
-  removeClick() {
-    this.#el.removeEventListener('click', this.click);
   }
 
   set fliped (val) {
@@ -42,6 +29,23 @@ class Card {
 
   set order (n) {
     this.toNode().style.order = n;
+  }
+
+  toNode() {
+    return this.#el;
+  }
+
+  click() {
+    const e = new CustomEvent('cardFlip', { detail: this });
+    document.dispatchEvent(e);
+  }
+
+  addClick() {
+    this.#el.addEventListener('click', this.click);
+  }
+
+  removeClick() {
+    this.#el.removeEventListener('click', this.click);
   }
 
   flip () {
@@ -69,7 +73,7 @@ class Card {
     this.#el.appendChild(front);
     this.#el.appendChild(back);
 
-    this.#el.addEventListener('click', this.click);
+    this.addClick();
   }
 
 }

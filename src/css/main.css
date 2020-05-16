@@ -1,5 +1,6 @@
 @import url('./variables.css');
 @import url('./keyframes.css');
+@import url('./modal.css');
 
 * {
   padding: 0;
@@ -11,15 +12,17 @@ html, body { height: 100%; }
 
 body {
   font-size: 16px;
-  color: #2b2b2b;
+  color: #ebebeb;
+  background-color: var(--bg-color);
 }
 
 #board {
   position: relative;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   perspective: 1000px;
-  padding: 100px 30px;
+  padding: 110px 30px 0;
 }
 
 .scoreboard {
@@ -43,11 +46,11 @@ body {
 }
 
 .scoreboard .hits {
-  background-color: var(--green);
+  background-color: var(--success);
 }
 
 .scoreboard .erros {
-  background-color: var(--red);
+  background-color: var(--danger);
 }
 
 .card {
@@ -71,7 +74,7 @@ body {
   height: 100%;
   width: 100%;
   backface-visibility: hidden;
-  background-color: #fff;
+  background-color: var(--bg-color);
 }
 
 .card .front {

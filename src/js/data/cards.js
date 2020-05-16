@@ -1,11 +1,11 @@
 // Simulate a API request
 
 export default [
-  { front: 'https://http2.mlstatic.com/balo-metalizado-qualatex-carta-de-baralho-1-unidade-D_NQ_NP_831596-MLB26742474685_012018-F.jpg' },
-  { front: 'https://2.bp.blogspot.com/-MXa_g2oph88/UYJ23k07YPI/AAAAAAAAAIw/jdIrMpc8RPo/s1600/3+de+espadas.png' },
-  { front: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQNpQwejITjoaSDQnFOfnFt5sbi-ukTo48_sKJy1n8h-m_0s6Cm&usqp=CAU' },
-  { front: 'https://i.pinimg.com/originals/03/d9/a7/03d9a7ef6f36b4063dfc121e05032689.jpg' },
-  // { front: 'oladddd' },
-  // { front: 'oladdddd' },
-  // { front: 'oladddddd' },
+  { front: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/10C.svg/800px-10C.svg.png' },
+  { front: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/10D.svg/800px-10D.svg.png' },
+  { front: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/10H.svg/800px-10H.svg.png' },
+  { front: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/10S.svg/800px-10S.svg.png' },
+  { front: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/11S.svg/800px-11S.svg.png' },
+  { front: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/11D.svg/800px-11D.svg.png' },
+  { front: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/2C.svg/800px-2C.svg.png' },
 ]
