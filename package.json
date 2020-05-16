@@ -5,13 +5,17 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server",
+    "build": "webpack",
+    "deploy": "yarn build && ./node_modules/.bin/gh-pages -d dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "babel": {
-    "plugins": ["@babel/plugin-proposal-class-properties"]
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
   },
   "dependencies": {
     "@babel/core": "^7.2.2",
@@ -24,5 +28,8 @@
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.2.0"
   }
 }
