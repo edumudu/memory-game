@@ -110,8 +110,13 @@ class Board {
   }
 
   disableCards() {
-    this.#isActive.first.removeClick(() => this.clickInCard(this.#isActive.first));
-    this.#isActive.second.removeClick(() => this.clickInCard(this.#isActive.second));
+    const { first, second } = this.#isActive;
+
+    first.removeClick(() => this.clickInCard(this.#isActive.first));
+    second.removeClick(() => this.clickInCard(this.#isActive.second));
+
+    first.markAsMatched();
+    second.markAsMatched();
 
     this.resetBoard()
   }

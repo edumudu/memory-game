@@ -1,4 +1,5 @@
 import '../css/main.css';
+import '@fortawesome/fontawesome-free/js/all';
 import Board from './Game/app';
 import Modal from './Modal';
 import cards from './data/cards';

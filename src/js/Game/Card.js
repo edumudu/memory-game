@@ -2,15 +2,12 @@ class Card {
   #fliped = false
   #id;
   #el;
-  #imgs = {
-    front: '',
-    back: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Card_back_10.svg/800px-Card_back_10.svg.png'
-  }
+  #icon;
 
   constructor(card, id) {
     this.#id = id;
     this.#el = document.createElement('div');
-    this.#imgs.front = card.front || '';
+    this.#icon = card.front || '';
 
     this.initCard()
   }
@@ -58,20 +55,26 @@ class Card {
     this.#el.classList.remove('active');
   }
 
+  markAsMatched () {
+    this.#el.classList.add('matched');
+  }
+
   initCard() {
     this.#el.classList.add('card');
 
-    const front = document.createElement('img');
-    const back = document.createElement('img');
+    this.#el.innerHTML = `
+      <div class="face front">
+        <i class="${this.#icon} main-icon"></i>
+        <i class="fab fa-mixcloud nimbus"></i>
+      </div>
 
-    front.src = this.#imgs.front;
-    back.src = this.#imgs.back;
+      <div class="face back">
+        <i class="fas fa-cloud-moon ornament"></i>
+        <i class="fas fa-cloud-moon ornament"></i>
 
-    front.classList.add('face', 'front');
-    back.classList.add('face', 'back');
-
-    this.#el.appendChild(front);
-    this.#el.appendChild(back);
+        <i class="fas fa-paw main-icon"></i>
+      </div>
+    `;
 
     this.addClick();
   }
