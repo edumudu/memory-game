@@ -8,10 +8,12 @@ class Scoreboard {
     this.#error = 0;
     
     this.#el = {
-      scoreboard: el,
+      scoreboard: el || document.createElement('div'),
       error: document.createElement('div'),
       hits: document.createElement('div')
     };
+
+    this.#el.scoreboard.classList.add('scoreboard');
 
     this.initValues();
   }

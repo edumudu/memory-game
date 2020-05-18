@@ -1,0 +1,19 @@
+.scoreboard {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  .hits,
+  .erros {
+    padding: 10px 15px;
+    margin-top: 10px;
+    border-radius: 15px;
+    color: #fff;
+
+    &.change { animation: grow_balance .6s; }
+  }
+
+  .hits { background-color: $success; }
+  .erros { background-color: $danger; }
+}

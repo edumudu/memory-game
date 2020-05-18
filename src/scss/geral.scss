@@ -1,0 +1,98 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html { min-height: 100vh; }
+
+body {
+  font-size: 16px;
+  font-family: 'Nunito', sans-serif;
+  color: #ebebeb;
+  background-color: #0a0a0a;
+}
+
+#board {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  perspective: 1000px;
+  padding: 110px 30px 0;
+}
+
+.card {
+  position: relative;
+  width: 150px;
+  height: 250px;
+  margin: 10px;
+  border-radius: 15px;
+  transform-style: preserve-3d;
+  transition: transform 0.4s;
+  border: 1px solid #fff;
+
+  &.matched .front .main-icon { animation: shake .8s alternate infinite ease-in-out; }
+  &:active { transform: scale(.9); }
+
+  &.active {
+    transform: rotateY(180deg);
+
+    .front .nimbus { animation: nimbus-fly 10s infinite linear, balance 2s alternate infinite ease-in; }
+  }
+
+  &:hover {
+    cursor: pointer;
+    box-shadow: 0 0 5px 1px rgb(90, 89, 89);
+
+    .ornament { font-size: 1.8rem; }
+  }
+
+  .ornament {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #ccc;
+    font-size: 1.5rem;
+    transition: width .7s, height .7s;
+
+    &:nth-of-type(odd) {
+      left: auto;
+      right: 10px;
+    }
+  }
+
+  .face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    backface-visibility: hidden;
+    background-color: $bg-color;
+    overflow: hidden;
+
+    &:hover .main-icon{ font-size: 5rem; }
+
+    .main-icon{
+      font-size: 4rem;
+      transition: width .4s, height .4s;
+      color: #ddd;
+    }
+  }
+
+  .front {
+    transform: rotateY(180deg);
+
+    .nimbus {
+      position: absolute;
+      bottom: 10px;
+      font-size: 2rem;
+      right: -2.5rem;
+    }
+  }
+}
+

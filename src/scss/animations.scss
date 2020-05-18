@@ -1,0 +1,53 @@
+@keyframes grow_balance {
+  from {
+    transform: scale(0.9) rotate(-10deg);
+  }
+  
+  80% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  
+  to {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes nimbus-fly {
+  from {
+    right: -2.5rem;
+  }
+
+  49% {
+    transform: rotateY(0deg);
+  }
+
+  50% {
+    right: calc(100% + 2.5rem);
+    transform: rotateY(180deg);
+  }
+
+  to {
+    right: -2.5rem;
+    transform: rotateY(180deg);
+  }
+}
+
+@keyframes balance{
+  from {
+    bottom: 6px;
+  }
+
+  to {
+    bottom: 14px;
+  }
+}
+
+@keyframes shake {
+  from {
+    transform: rotate(-20deg);
+  }
+
+  to {
+    transform: rotate(10deg);
+  }
+}

@@ -53,6 +53,7 @@ class Card {
   unflip () {
     this.#fliped = false;
     this.#el.classList.remove('active');
+    this.#el.classList.remove('matched');
   }
 
   markAsMatched () {

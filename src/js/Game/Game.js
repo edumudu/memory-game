@@ -3,45 +3,36 @@ import Scoreboard from './Scoreboard'
 
 class Board {
   #locked = false;
-  #scoreboard;
-  #cards = [];
+  #countDown;
   #board;
-  #wonCallback;
+  wonCallback;
+  loseCallback;
   #timeout;
-  #loseCallback;
   #isActive = {
     first: null,
     second: null
   }
 
-  constructor(el, cards = []) {
-    this.#cards = cards;
+  constructor(el, totalTime, cards = []) {
     this.#board = el;
+    this.totalTime = totalTime;
+    this.timeRemaining = totalTime;
+    this.timer = document.createElement('div');
+    this.cards = cards.map((card, index) => {
+      return [new Card(card, index), new Card(card, index)]
+    }).flat();
+
+    this.timer.classList.add('timer');
+    this.#board.appendChild(this.timer);
   }
 
-  set cards(cards) {
-    this.#cards = cards;
-  }
-
-  set wonCallback(callback) {
-    this.#wonCallback = callback;
-  }
-
-  set loseCallback(callback) {
-    this.#loseCallback = callback;
-  }
-
-  initGame() {
+  startGame() {
     this.initScoreBoard();
     this.initCards();
+    this.startCountDown();
   }
 
   initCards() {
-    const cards = this.#cards.map((card, index) => {
-      return [new Card(card, index), new Card(card, index)]
-    })
-
-    this.#cards = cards.flat();
     this.shuffle();
 
     document.addEventListener('cardFlip', e => this.clickInCard(e.detail))
@@ -50,35 +41,42 @@ class Board {
   }
 
   initScoreBoard() {
-    const scoreboard = document.createElement('div');
-
-    scoreboard.classList.add('scoreboard');
-
-    this.#scoreboard = new Scoreboard(scoreboard);
-
-    this.#board.appendChild(this.#scoreboard.el);
+    this.scoreboard = new Scoreboard();
+    this.#board.appendChild(this.scoreboard.el);
   }
 
   shuffle() {
-    this.#cards.forEach(card => {
-      const randomNumber = Math.floor(Math.random() * this.#cards.length);
+    this.cards.forEach(card => {
+      const randomNumber = Math.floor(Math.random() * this.cards.length);
 
       card.order = randomNumber;
     })
   }
 
+  startCountDown() {
+    this.#countDown = setInterval(() => {
+      this.timeRemaining--;
+      this.timer.textContent = this.timeRemaining;
+
+      if(this.timeRemaining == 0) {
+        clearInterval(this.#countDown);
+        this.loseCallback();
+      }
+    }, 1000);
+  }
+
   insertCardsInBoard() {
-    this.#cards.forEach(card => this.#board.appendChild(card.toNode()));
+    this.cards.forEach(card => this.#board.appendChild(card.toNode()));
   }
 
   removeCardsFromBoard() {
-    this.#cards.forEach(card => this.#board.removeChild(card.toNode()));
+    this.cards.forEach(card => this.#board.removeChild(card.toNode()));
   }
 
   clickInCard(card) {
     if(this.#locked) return
 
-    card = this.#cards.find(c => c.toNode() === card);
+    card = this.cards.find(c => c.toNode() === card);
 
     if(this.#isActive.first === card) return
 
@@ -100,13 +98,13 @@ class Board {
 
     if(isMatch) {
       this.disableCards();
-      this.incrementMatches();
-      this.checkIfWon();
+      this.scoreboard.hits++;
     } else {
       this.unflipCards();
-      this.incrementErrors();
-      this.checkIfLose();
+      this.scoreboard.error++;
     };
+
+    this.checkIfWonOrLose();
   }
 
   disableCards() {
@@ -144,39 +142,31 @@ class Board {
   resetGame() {
     this.resetBoard();
     this.resetAllCards();
-    this.#scoreboard.reset();
+    this.scoreboard.reset();
+    this.timeRemaining = this.totalTime;
   }
 
   resetAllCards() {
     this.removeCardsFromBoard();
     this.shuffle();
     this.insertCardsInBoard();
-    this.#cards.forEach(card => card.unflip());
-    this.#cards.forEach(card => card.removeClick());
-    this.#cards.forEach(card => card.addClick());
+
+    this.cards.forEach(card => {
+      card.unflip();
+      card.removeClick();
+      card.addClick();
+    });
   }
 
-  incrementMatches() {
-    this.#scoreboard.hits++;
-  }
-
-  incrementErrors() {
-    this.#scoreboard.error++;
-  }
-
-  checkIfWon() {
-    if(this.#cards.length / 2 === this.#scoreboard.hits) {
+  checkIfWonOrLose() {
+    if(this.scoreboard.error >= 10) {
       clearTimeout(this.#timeout);
       this.#locked = true;
-      this.#wonCallback();
-    }
-  }
-
-  checkIfLose() {
-    if(this.#scoreboard.error >= 10) {
+      this.loseCallback();
+    } else if(this.cards.length / 2 === this.scoreboard.hits) {
       clearTimeout(this.#timeout);
       this.#locked = true;
-      this.#loseCallback();
+      this.wonCallback();
     }
   }
 }

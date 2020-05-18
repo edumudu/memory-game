@@ -1,14 +1,14 @@
-import '../css/main.css';
+import '../scss/app.scss';
 import '@fortawesome/fontawesome-free/js/all';
-import Board from './Game/app';
+import Board from './Game/Game';
 import Modal from './Modal';
 import cards from './data/cards';
 
 const el = document.querySelector('#board');
-const board = new Board(el, cards);
+const board = new Board(el, 100, cards);
 const modal = new Modal('#modal');
 
-board.initGame();
+board.startGame();
 
 board.wonCallback = () => {
   modal.setTitle('Você ganhou!');
