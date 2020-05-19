@@ -1,5 +1,6 @@
 .tooltip {
   position: relative;
+  z-index: 1;
   display: inline-block;
 
   &::after {
@@ -8,7 +9,6 @@
     top: calc(100% + 10px);
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1;
     display: none;
     padding: 8px 10px;
     background-color: #fff;
