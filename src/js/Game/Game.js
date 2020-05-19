@@ -16,20 +16,13 @@ class Board {
   constructor(el, totalTime, cards = []) {
     this.#board = el;
     this.totalTime = totalTime;
-    this.timeRemaining = totalTime;
     this.timer = document.createElement('div');
     this.cards = cards.map((card, index) => {
       return [new Card(card, index), new Card(card, index)]
     }).flat();
 
     this.timer.classList.add('timer');
-    this.#board.appendChild(this.timer);
-  }
-
-  startGame() {
-    this.initScoreBoard();
-    this.initCards();
-    this.startCountDown();
+    document.querySelector('#game-info').appendChild(this.timer);
   }
 
   initCards() {
@@ -42,7 +35,21 @@ class Board {
 
   initScoreBoard() {
     this.scoreboard = new Scoreboard();
-    this.#board.appendChild(this.scoreboard.el);
+    document.querySelector('#game-info').appendChild(this.scoreboard.el);
+  }
+
+  observe(observed, callback, oldvalue) {
+    undefined === oldvalue && (oldvalue = this[observed]);
+    
+    let check = setInterval((oldvalue) => {
+      const value = this[observed];
+
+      if (value !== oldvalue) {
+        clearInterval(check);
+        callback(value);
+        this.observe(observed, callback, value);
+      }
+    }, 500, oldvalue);
   }
 
   shuffle() {
@@ -54,14 +61,13 @@ class Board {
   }
 
   startCountDown() {
+    this.observe('timeRemaining', v => this.timer.textContent = `Time ${v}`);
+    this.timeRemaining = this.totalTime;
+
     this.#countDown = setInterval(() => {
       this.timeRemaining--;
-      this.timer.textContent = this.timeRemaining;
 
-      if(this.timeRemaining == 0) {
-        clearInterval(this.#countDown);
-        this.loseCallback();
-      }
+      if(this.timeRemaining === 0) this.gameOver();
     }, 1000);
   }
 
@@ -101,10 +107,9 @@ class Board {
       this.scoreboard.hits++;
     } else {
       this.unflipCards();
-      this.scoreboard.error++;
     };
 
-    this.checkIfWonOrLose();
+    this.checkIfWon();
   }
 
   disableCards() {
@@ -139,13 +144,6 @@ class Board {
     this.#locked = false;
   }
 
-  resetGame() {
-    this.resetBoard();
-    this.resetAllCards();
-    this.scoreboard.reset();
-    this.timeRemaining = this.totalTime;
-  }
-
   resetAllCards() {
     this.removeCardsFromBoard();
     this.shuffle();
@@ -158,16 +156,37 @@ class Board {
     });
   }
 
-  checkIfWonOrLose() {
-    if(this.scoreboard.error >= 10) {
-      clearTimeout(this.#timeout);
-      this.#locked = true;
-      this.loseCallback();
-    } else if(this.cards.length / 2 === this.scoreboard.hits) {
-      clearTimeout(this.#timeout);
+  stopTimers() {
+    clearInterval(this.#countDown);
+    clearTimeout(this.#timeout);
+  }
+
+  checkIfWon() {
+    if(this.cards.length / 2 === this.scoreboard.hits) {
+      this.stopTimers();
       this.#locked = true;
       this.wonCallback();
     }
+  }
+
+  startGame() {
+    this.initScoreBoard();
+    this.initCards();
+    this.startCountDown();
+  }
+
+  restartGame() {
+    this.stopTimers();
+    this.resetBoard();
+    this.resetAllCards();
+    this.scoreboard.reset();
+    this.startCountDown();
+  }
+
+  gameOver() {
+    this.stopTimers()
+    this.#locked = true;
+    this.loseCallback();
   }
 }
 

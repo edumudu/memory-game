@@ -5,6 +5,7 @@ import Modal from './Modal';
 import cards from './data/cards';
 
 const el = document.querySelector('#board');
+const restartButton = document.querySelector('#restart-button');
 const board = new Board(el, 100, cards);
 const modal = new Modal('#modal');
 
@@ -20,11 +21,18 @@ board.loseCallback = () => {
   modal.show();
 };
 
-modal.setContent('Conteudo Real do modal');
+restartButton.addEventListener('click', function(e) {
+  e.preventDefault();
+  board.restartGame();
+  this.classList.remove('visible');
+}, false);
 
 modal.setAction('jogar de novo', () => {
-  board.resetGame();
+  board.restartGame();
   modal.hide();
 }, ['success']);
 
-modal.setAction('fechar', () => modal.hide(), ['danger']);
+modal.setAction('fechar', () => {
+  modal.hide();
+  restartButton.classList.add('visible');
+}, ['danger']);

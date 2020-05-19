@@ -1,19 +1,31 @@
-.scoreboard {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+#game-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 80px 0;
 
-  .hits,
-  .erros {
+  #restart-button {
+    display: none;
+    order: 1;
+    color: $success;
+    font-size: 2rem;
+    cursor: pointer; 
+
+    &.visible { display: block; }
+  }
+}
+
+.scoreboard {
+  order: 2;
+
+  .hits {
     padding: 10px 15px;
     margin-top: 10px;
-    border-radius: 15px;
+    border-radius: 5px;
     color: #fff;
 
     &.change { animation: grow_balance .6s; }
   }
 
   .hits { background-color: $success; }
-  .erros { background-color: $danger; }
 }
