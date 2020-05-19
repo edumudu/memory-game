@@ -60,7 +60,7 @@ class Modal {
     classes = [...classes, 'btn'];
 
     button.classList.add(...classes);
-    button.textContent = text;
+    button.innerHTML = text;
     button.addEventListener('click', callback);
 
     this.#modalNodes.actions.appendChild(button);

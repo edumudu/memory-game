@@ -29,7 +29,7 @@ class Scoreboard {
 
   set hits (value) {
     this.#hits = value;
-    this.#el.hits.innerHTML = `Acertos: ${value}`;
+    this.#el.hits.innerHTML = `Hits: ${value}`;
     this.#el.hits.classList.add('change');
 
     setTimeout(() => this.#el.hits.classList.remove('change'), 700);

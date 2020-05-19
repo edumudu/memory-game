@@ -51,3 +51,11 @@
     transform: rotate(10deg);
   }
 }
+
+@keyframes up-disapear {
+  from { opacity: 1; }
+  to {
+    top: 20%;
+    opacity: 0.3;
+  }
+}

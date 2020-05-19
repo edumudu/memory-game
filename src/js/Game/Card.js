@@ -11,6 +11,10 @@ class Card {
     this.#el = document.createElement('div');
     this.#icon = card.front || '';
     this.AudioController = new AudioController();
+    this.effect = document.createElement('span');
+
+    this.effect.innerHTML = '<i class="fas fa-plus"></i>';
+    this.effect.classList.add('match-effect');
 
     this.initCard()
   }
@@ -62,6 +66,12 @@ class Card {
 
   markAsMatched () {
     this.#el.classList.add('matched');
+
+    for(let i = 1; i <= 6; i++) {
+      const clone = this.effect.cloneNode(true);
+      this.#el.firstElementChild.appendChild(clone);
+      setTimeout(() => this.#el.firstElementChild.removeChild(clone), 1000);
+    }
   }
 
   initCard() {
@@ -76,8 +86,11 @@ class Card {
       <div class="face back">
         <i class="fas fa-cloud-moon ornament"></i>
         <i class="fas fa-cloud-moon ornament"></i>
+        <i class="fas fa-cloud-moon ornament bottom"></i>
+        <i class="fas fa-cloud-moon ornament bottom"></i>
 
         <i class="fas fa-paw main-icon"></i>
+
       </div>
     `;
 

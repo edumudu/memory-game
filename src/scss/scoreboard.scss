@@ -9,8 +9,10 @@
     order: 1;
     color: $success;
     font-size: 2rem;
+    transition: font-size 0.2s;
     cursor: pointer; 
 
+    &:hover { font-size: 2.3rem; }
     &.visible { display: block; }
   }
 }

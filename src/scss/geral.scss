@@ -56,9 +56,14 @@ body {
     font-size: 1.5rem;
     transition: width .1s, height .1s;
 
-    &:nth-of-type(odd) {
+    &:nth-of-type(even) {
       left: auto;
       right: 10px;
+    }
+
+    &.bottom {
+      top: auto;
+      bottom: 10px;
     }
   }
 
@@ -96,6 +101,24 @@ body {
   }
 
   .back { color: #636e72; }
+
+  .match-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    color: $success;
+    font-size: 1.5rem;
+    animation: up-disapear 1s ease-in;
+
+    @for $i from 1 through 6 {
+      &:nth-of-type(#{$i}) {
+        left:  percentage((random(40) + 30) / 100);
+        top:  percentage((random(30) + 30) / 100);
+      }
+    }
+  }
 }
 
 .timer {
