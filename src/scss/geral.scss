@@ -91,6 +91,7 @@ body {
   .front {
     transform: rotateY(180deg);
     color: #ddd;
+    z-index: 1; // For firefox
 
     .nimbus {
       position: absolute;
