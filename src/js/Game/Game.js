@@ -1,5 +1,6 @@
-import Card from './Card'
-import Scoreboard from './Scoreboard'
+import Card from './Card';
+import Scoreboard from './Scoreboard';
+import AudioController from './AudioController';
 
 class Board {
   #locked = false;
@@ -17,6 +18,7 @@ class Board {
     this.#board = el;
     this.totalTime = totalTime;
     this.timer = document.createElement('div');
+    this.AudioController = new AudioController;
     this.cards = cards.map((card, index) => {
       return [new Card(card, index), new Card(card, index)]
     }).flat();
@@ -103,6 +105,7 @@ class Board {
     const isMatch = this.#isActive.first.id === this.#isActive.second.id
 
     if(isMatch) {
+      this.AudioController.match();
       this.disableCards();
       this.scoreboard.hits++;
     } else {

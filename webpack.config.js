@@ -29,6 +29,11 @@ module.exports = {
               test: /\.scss$/,  
               use: ['style-loader', 'css-loader', 'sass-loader'] 
             },
+            {
+              exclude: /node_modules/,
+              test: /\.(wav|mp3)$/,  
+              use: ['file-loader'] 
+            },
         ]
     },
     output: {

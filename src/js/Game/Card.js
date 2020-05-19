@@ -1,3 +1,5 @@
+import AudioController from './AudioController';
+
 class Card {
   #fliped = false
   #id;
@@ -8,6 +10,7 @@ class Card {
     this.#id = id;
     this.#el = document.createElement('div');
     this.#icon = card.front || '';
+    this.AudioController = new AudioController();
 
     this.initCard()
   }
@@ -46,6 +49,7 @@ class Card {
   }
 
   flip () {
+    this.AudioController.flip();
     this.#fliped = true;
     this.#el.classList.add('active');
   }

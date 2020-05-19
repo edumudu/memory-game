@@ -10,7 +10,7 @@ body {
   font-size: 16px;
   font-family: 'Nunito', sans-serif;
   color: #ebebeb;
-  background-color: #0a0a0a;
+  background-color: $bg-color;
 }
 
 #board {
@@ -52,7 +52,7 @@ body {
     position: absolute;
     top: 10px;
     left: 10px;
-    color: #ccc;
+    color: #636e72;
     font-size: 1.5rem;
     transition: width .1s, height .1s;
 
@@ -72,7 +72,7 @@ body {
     height: 100%;
     width: 100%;
     backface-visibility: hidden;
-    background-color: $bg-color;
+    background-color: $card-bg;
     overflow: hidden;
 
     &:hover .main-icon{ font-size: 5rem; }
@@ -80,12 +80,12 @@ body {
     .main-icon{
       font-size: 4rem;
       transition: width .2s, height .2s;
-      color: #ddd;
     }
   }
 
   .front {
     transform: rotateY(180deg);
+    color: #ddd;
 
     .nimbus {
       position: absolute;
@@ -94,6 +94,8 @@ body {
       right: -2.5rem;
     }
   }
+
+  .back { color: #636e72; }
 }
 
 .timer {
