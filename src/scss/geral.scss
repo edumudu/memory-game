@@ -29,11 +29,11 @@ body {
   margin: 10px;
   border-radius: 15px;
   transform-style: preserve-3d;
-  transition: transform 0.4s;
+  transition: transform .4s;
   border: 1px solid #fff;
 
   &.matched .front .main-icon { animation: shake .8s alternate infinite ease-in-out; }
-  &:active { transform: scale(.9); }
+  &:active { transform: scale(.95); }
 
   &.active {
     transform: rotateY(180deg);

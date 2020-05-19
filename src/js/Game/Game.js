@@ -3,7 +3,7 @@ import Scoreboard from './Scoreboard';
 import AudioController from './AudioController';
 
 class Board {
-  #locked = false;
+  #locked = true;
   #countDown;
   #board;
   wonCallback;
@@ -25,6 +25,12 @@ class Board {
 
     this.timer.classList.add('timer');
     document.querySelector('#game-info').appendChild(this.timer);
+
+    this.observe('timeRemaining', v => this.timer.textContent = `Time ${v}`);
+    this.timeRemaining = totalTime;
+    
+    this.initCards();
+    this.initScoreBoard();
   }
 
   initCards() {
@@ -63,7 +69,6 @@ class Board {
   }
 
   startCountDown() {
-    this.observe('timeRemaining', v => this.timer.textContent = `Time ${v}`);
     this.timeRemaining = this.totalTime;
 
     this.#countDown = setInterval(() => {
@@ -173,8 +178,7 @@ class Board {
   }
 
   startGame() {
-    this.initScoreBoard();
-    this.initCards();
+    this.#locked = false;
     this.startCountDown();
   }
 

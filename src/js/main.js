@@ -9,8 +9,6 @@ const restartButton = document.querySelector('#restart-button');
 const board = new Board(el, 100, cards);
 const modal = new Modal('#modal');
 
-board.startGame();
-
 board.wonCallback = () => {
   modal.setTitle('You win!');
   modal.show();
@@ -35,4 +33,5 @@ modal.setAction('<i class="fas fa-play"></i>', () => {
 modal.setAction('<i class="fas fa-times"></i>', () => {
   modal.hide();
   restartButton.classList.add('visible');
+  restartButton.dataset.tooltip = 'Restart game';
 }, ['danger']);
