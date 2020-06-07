@@ -8,8 +8,6 @@ class Board {
     this.scoreboard = { total: 0 };
 
     this.playerOfTheTime = players[Math.floor(Math.random() * 2)];
-
-    this.startTimer();
   }
 
   shuffle (cards) {
@@ -64,14 +62,7 @@ class Board {
   }
 
   togglePlayer () {
-    const index = this.players.indexOf(this.playerOfTheTime) === 0 ? 1 : 0;
-    this.playerOfTheTime = this.players[index];
-  }
-
-  startTimer () {
-    // this.timerInterval = setInterval(() => {
-    //   this.elapsedTime++;
-    // }, 1000);
+    this.playerOfTheTime = this.players.find(player => player !== this.playerOfTheTime);
   }
 }
 
