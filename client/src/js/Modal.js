@@ -66,6 +66,10 @@ class Modal {
     this.#modalNodes.actions.appendChild(button);
   }
 
+  removeAction(id) {
+    this.#modalNodes.actions.children[id].remove();
+  }
+
   setTitle(text) {
     this.#modalNodes.title.textContent = text;
   }
