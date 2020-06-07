@@ -1,4 +1,5 @@
 import AudioController from './AudioController';
+import socket from './../io';
 
 class Card {
   #fliped = false
@@ -6,13 +7,15 @@ class Card {
   #el;
   #icon;
 
-  constructor(card, id) {
-    this.#id = id;
+  constructor({id, order, icon}) {
     this.#el = document.createElement('div');
-    this.#icon = card.front || '';
+    this.#id = id;
+    this.#icon = icon || '';
+    this.order = order;
+    
     this.AudioController = new AudioController();
+    
     this.effect = document.createElement('span');
-
     this.effect.innerHTML = '<i class="fas fa-plus"></i>';
     this.effect.classList.add('match-effect');
 
@@ -40,12 +43,11 @@ class Card {
   }
 
   click() {
-    const e = new CustomEvent('cardFlip', { detail: this });
-    document.dispatchEvent(e);
+    socket.emit('click', this.id);
   }
 
   addClick() {
-    this.#el.addEventListener('click', this.click);
+    this.#el.addEventListener('click', this.click.bind(this));
   }
 
   removeClick() {

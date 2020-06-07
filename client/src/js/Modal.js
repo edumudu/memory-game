@@ -54,7 +54,7 @@ class Modal {
     }
   }
 
-  setAction(text, callback, classes = []) {
+  setAction(text, callback, classes = [], tooltip = '') {
     const button = document.createElement('button');
 
     classes = [...classes, 'btn'];
@@ -63,7 +63,16 @@ class Modal {
     button.innerHTML = text;
     button.addEventListener('click', callback);
 
+    if (tooltip) {
+      button.dataset.tooltip = tooltip;
+      button.classList.add('tooltip');
+    }
+
     this.#modalNodes.actions.appendChild(button);
+  }
+
+  removeAction(id) {
+    this.#modalNodes.actions.children[id].remove();
   }
 
   setTitle(text) {

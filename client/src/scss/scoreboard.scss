@@ -30,5 +30,6 @@
     &.change { animation: grow_balance .6s; }
   }
 
-  .hits { background-color: $success; }
+  .my-hits { background-color: $success; }
+  .enemy-hits { background-color: $danger; }
 }
