@@ -53,8 +53,8 @@ class Scoreboard {
   initValues() {
     const {scoreboard, myHits, enemyHits} = this.#el;
 
-    myHits.classList.add('hits');
-    enemyHits.classList.add('hits');
+    myHits.classList.add('hits', 'my-hits');
+    enemyHits.classList.add('hits', 'enemy-hits');
     
     scoreboard.appendChild(myHits);
     scoreboard.appendChild(enemyHits);
@@ -63,6 +63,10 @@ class Scoreboard {
   reset() {
     this.myHits = 0;
     this.enemyHits = 0;
+  }
+
+  destroy () {
+    this.el.remove();
   }
 }
 

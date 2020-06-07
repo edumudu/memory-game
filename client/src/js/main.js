@@ -5,22 +5,33 @@ import Modal from './Modal';
 import socket from './io';
 
 const el = document.querySelector('#board');
-const restartButton = document.querySelector('#restart-button');
 const modal = new Modal('#modal');
 const menu = new Modal('#menu');
+const playerTurn = document.querySelector('#player-turn');
 
 let game;
+let room;
 
 menu.setAction('<i class="fas fa-play"></i>', () => {
-  socket.emit('room', 'room-1');
+  socket.emit('room');
   menu.setTitle('Waiting for other player')
   menu.removeAction(0);
 });
 menu.show();
 
-socket.on('start-game', board => {
-  game = new Board(el, board);
+modal.setAction('<i class="fas fa-play"></i>', () => {
+  socket.emit('room', room);
+  modal.hide();
+  menu.show();
+  game.destroy();
+  playerTurn.textContent = '';
+}, ['success'], 'Rematch');
+
+socket.on('start-game', (board, playerRoom) => {
+  room = playerRoom;
+  game = new Board(el, board, socket.id);
   menu.hide();
+  playerTurn.textContent = board.playerOfTheTime === game.me ? 'You turn' : 'Enemy turn';
 })
 
 socket.on('check', ids => {
@@ -36,34 +47,23 @@ socket.on('unflip', ids => {
 });
 
 socket.on('hits', scoreboard => {
-  game.setScoreboard(scoreboard, socket.id);
+  game.setScoreboard(scoreboard);
 });
 
 socket.on('won', () => {
   game.stopTimers();
   modal.setTitle('You win!');
   modal.show();
+  socket.emit('leave', room);
 });
 
 socket.on('lose', () => {
   game.stopTimers();
   modal.setTitle('You lose!');
   modal.show();
+  socket.emit('leave', room);
 });
 
-// modal.setAction('<i class="fas fa-play"></i>', () => {
-//   board.restartGame();
-//   modal.hide();
-// }, ['success']);
-
-// modal.setAction('<i class="fas fa-times"></i>', () => {
-//   modal.hide();
-//   restartButton.classList.add('visible');
-//   restartButton.dataset.tooltip = 'Restart game';
-// }, ['danger']);
-
-// restartButton.addEventListener('click', function(e) {
-//   e.preventDefault();
-//   board.restartGame();
-//   this.classList.remove('visible');
-// }, false);
+socket.on('toggle-player', player => {
+  playerTurn.textContent = player === game.me ? 'You turn' : 'Enemy turn';
+})

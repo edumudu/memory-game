@@ -5,8 +5,9 @@ import AudioController from './AudioController';
 class Board {
   #board;
 
-  constructor(el, { elapsedTime, cards, players }) {
+  constructor(el, { elapsedTime, cards, players }, me) {
     this.#board = el;
+    this.me = me;
     this.elapsedTime = elapsedTime;
     this.players = players;
     this.cards = cards.map(card => new Card(card));
@@ -15,7 +16,7 @@ class Board {
     this.AudioController = new AudioController;
 
     this.timer.classList.add('timer');
-    document.querySelector('#game-info').appendChild(this.timer);
+    document.querySelector('#game-info').prepend(this.timer);
 
     
     this.insertCardsInBoard();
@@ -59,38 +60,21 @@ class Board {
     this.AudioController.match();
   }
 
-  setScoreboard (score, id) {
-    const index = this.players.indexOf(id) === 0 ? 1 : 0;
-    const enemyId = this.players[index];
-
-     this.scoreboard.myHits = score[id] || 0;
-     this.scoreboard.enemyHits = score[enemyId] || 0;
-  }
-
-  resetAllCards() {
-    this.removeCardsFromBoard();
-    this.insertCardsInBoard();
-
-    this.cards.forEach(card => {
-      card.unflip();
-      card.removeClick();
-      card.addClick();
-    });
+  setScoreboard (score) {
+    this.players.forEach(player => {
+      this.scoreboard[player === this.me ? 'myHits' : 'enemyHits'] = score[player] || 0;
+    })
   }
 
   stopTimers() {
     clearInterval(this.timerInterval);
   }
 
-  startGame() {
-    this.startTimer();
-  }
-
-  restartGame() {
+  destroy () {
+    this.removeCardsFromBoard();
+    this.scoreboard.destroy();
     this.stopTimers();
-    this.resetAllCards();
-    this.scoreboard.reset();
-    this.startTimer();
+    this.timer.remove();
   }
 }
 

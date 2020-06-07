@@ -13,6 +13,11 @@ body {
   background-color: $bg-color;
 }
 
+a { 
+  text-decoration: none;
+  color: inherit;
+}
+
 #board {
   position: relative;
   display: flex;
@@ -125,4 +130,9 @@ body {
 .timer {
   font-size: 2rem;
   font-weight: bold;
+}
+
+#player-turn {
+  font-size: 1.5rem;
+  color: $info;
 }
