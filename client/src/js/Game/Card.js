@@ -1,3 +1,4 @@
+import { icon } from '@fortawesome/fontawesome-svg-core'
 import AudioController from './AudioController';
 import socket from './../io';
 
@@ -7,14 +8,16 @@ class Card {
   #el;
   #icon;
 
-  constructor({id, order, icon}) {
+  constructor({ id, order, icon: iconNames }) {
     this.#el = document.createElement('div');
     this.#id = id;
-    this.#icon = icon || '';
     this.order = order;
-    
     this.AudioController = new AudioController();
     
+    const [prefix, iconName] = iconNames.split(' ');
+    this.#icon = icon({ prefix, iconName }).node[0];
+    this.#icon.classList.add('main-icon');
+
     this.effect = document.createElement('span');
     this.effect.innerHTML = '<i class="fas fa-plus"></i>';
     this.effect.classList.add('match-effect');
@@ -55,6 +58,8 @@ class Card {
   }
 
   flip () {
+    clearTimeout(this.flipTimeout);
+    this.#el.querySelector('.face.front').appendChild(this.#icon);
     this.AudioController.flip();
     this.#fliped = true;
     this.#el.classList.add('active');
@@ -64,6 +69,7 @@ class Card {
     this.#fliped = false;
     this.#el.classList.remove('active');
     this.#el.classList.remove('matched');
+    this.flipTimeout = setTimeout(() => this.#icon.remove(), 800);
   }
 
   markAsMatched () {
@@ -81,7 +87,6 @@ class Card {
 
     this.#el.innerHTML = `
       <div class="face front">
-        <i class="${this.#icon} main-icon"></i>
         <i class="fab fa-mixcloud nimbus"></i>
       </div>
 

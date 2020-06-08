@@ -29,7 +29,7 @@ io.on('connection', socket => {
     const clientes = rooms[room];
 
     if(clientes.length === 2) {
-      games[room] = new Board(cards.slice(), Object.keys(clientes.sockets));
+      games[room] = new Board(cards, Object.keys(clientes.sockets));
       io.sockets.in(room).emit('start-game', games[room], room);
     }
   });

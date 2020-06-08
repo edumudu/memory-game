@@ -1,7 +1,7 @@
 class Board {
   constructor (cards, players) {
     this.elapsedTime = 0;
-    this.cards = this.shuffle(cards);
+    this.cards = this.shuffle([...cards, ...cards].map(card => ({ ...card })));
     this.players = players;
     this.activesCards = [];
     this.matches = [];
@@ -13,7 +13,6 @@ class Board {
   shuffle (cards) {
     return cards.map(card => {
       const randomNumber = Math.floor(Math.random() * cards.length);
-      card = { ...card };
       card.order = randomNumber;
       card.id = `_${Math.random().toString(36).substr(2, 9)}`;
 
