@@ -13,6 +13,7 @@ class Board {
   shuffle (cards) {
     return cards.map(card => {
       const randomNumber = Math.floor(Math.random() * cards.length);
+      card = { ...card };
       card.order = randomNumber;
       card.id = `_${Math.random().toString(36).substr(2, 9)}`;
 
@@ -23,7 +24,7 @@ class Board {
   click (id) {
     const card = this.cards.find(card => card.id === id);
     
-    if(!this.checkIfCanFlip(id) || this.activesCards.length >= 2) return this.activesCards;
+    if(!card || !this.checkIfCanFlip(id) || this.activesCards.length >= 2) return this.activesCards;
     
     this.activesCards.push(card)
 

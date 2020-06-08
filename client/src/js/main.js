@@ -31,7 +31,7 @@ socket.on('start-game', (board, playerRoom) => {
   room = playerRoom;
   game = new Board(el, board, socket.id);
   menu.hide();
-  playerTurn.textContent = board.playerOfTheTime === game.me ? 'You turn' : 'Enemy turn';
+  playerTurn.textContent = board.playerOfTheTime === game.me ? 'Your turn' : 'Enemy turn';
 })
 
 socket.on('check', ids => {
@@ -65,5 +65,5 @@ socket.on('lose', () => {
 });
 
 socket.on('toggle-player', player => {
-  playerTurn.textContent = player === game.me ? 'You turn' : 'Enemy turn';
+  playerTurn.textContent = player === game.me ? 'Your turn' : 'Enemy turn';
 })
