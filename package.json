@@ -5,6 +5,6 @@
   "author": "Eduardo Wesley <eduardomudutiu@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "cd server && yarn && yarn start"
+    "postinstall": "cd server && yarn && yarn start"
   }
 }
