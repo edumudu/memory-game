@@ -1,0 +1,10 @@
+{
+  "name": "memory-card",
+  "version": "1.0.0",
+  "repository": "git@github.com:edumudu/memory-game.git",
+  "author": "Eduardo Wesley <eduardomudutiu@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "cd server && yarn start"
+  }
+}
