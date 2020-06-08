@@ -71,6 +71,4 @@ io.on('connection', socket => {
   });
 });
 
-Http.listen(3000, () => {
-  console.log('Server runing in: http://localhost:3000');
-});
+Http.listen(process.env.PORT || 3000);
