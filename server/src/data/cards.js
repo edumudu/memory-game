@@ -22,4 +22,5 @@ module.exports = [
   { icon: 'fas fa-dove' },
   { icon: 'fas fa-cat' },
   { icon: 'fas fa-crow' },
+  { icon: 'fas fa-crow' },
 ]
