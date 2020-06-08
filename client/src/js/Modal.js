@@ -54,12 +54,12 @@ class Modal {
     }
   }
 
-  setAction(text, callback, classes = [], tooltip = '') {
+  setAction(text, callback, classes = '', tooltip = '') {
     const button = document.createElement('button');
 
-    classes = [...classes, 'btn'];
+    classes = classes ? `${classes} btn` : 'btn';
 
-    button.classList.add(...classes);
+    button.classList.add(...classes.split(' '));
     button.innerHTML = text;
     button.addEventListener('click', callback);
 
@@ -71,8 +71,12 @@ class Modal {
     this.#modalNodes.actions.appendChild(button);
   }
 
-  removeAction(id) {
-    this.#modalNodes.actions.children[id].remove();
+  disableAction(id) {
+    this.#modalNodes.actions.children[id].style.display = 'none';
+  }
+
+  enableAction(id) {
+    this.#modalNodes.actions.children[id].style.display = 'block';
   }
 
   setTitle(text) {

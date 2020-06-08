@@ -6,6 +6,7 @@ class Board {
     this.activesCards = [];
     this.matches = [];
     this.scoreboard = { total: 0 };
+    this.rematchRequests = 0;
 
     this.playerOfTheTime = players[Math.floor(Math.random() * 2)];
   }

@@ -11,13 +11,17 @@ class Board {
     this.elapsedTime = elapsedTime;
     this.players = players;
     this.cards = cards.map(card => new Card(card));
+
     this.timer = document.createElement('div');
     this.timer.textContent = `Time ${this.elapsedTime}`;
+
+    this.playerTurnEl = document.createElement('div');
+    this.playerTurnEl.classList.add('player-turn');
+
     this.AudioController = new AudioController;
 
     this.timer.classList.add('timer');
-    document.querySelector('#game-info').prepend(this.timer);
-
+    document.querySelector('#game-info').append(this.timer, this.playerTurnEl);
     
     this.insertCardsInBoard();
     this.initScoreBoard();
@@ -66,6 +70,10 @@ class Board {
     })
   }
 
+  setPlayerTurn(playerOfTheTime) {
+    this.playerTurnEl.textContent = playerOfTheTime === this.me ? 'Your turn' : 'Enemy turn';
+  }
+
   stopTimers() {
     clearInterval(this.timerInterval);
   }
@@ -75,6 +83,7 @@ class Board {
     this.scoreboard.destroy();
     this.stopTimers();
     this.timer.remove();
+    this.playerTurnEl.remove();
   }
 }
 

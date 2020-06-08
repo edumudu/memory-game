@@ -56,8 +56,7 @@ class Scoreboard {
     myHits.classList.add('hits', 'my-hits');
     enemyHits.classList.add('hits', 'enemy-hits');
     
-    scoreboard.appendChild(myHits);
-    scoreboard.appendChild(enemyHits);
+    scoreboard.append(myHits, enemyHits);
   }
 
   reset() {
