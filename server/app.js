@@ -28,14 +28,17 @@ io.on('connection', socket => {
 
     const clientes = rooms[room];
 
-    if(clientes.length === 2) {
+    if(games[room]) {
+      games[room].rematchRequests++;
+      
+      if (games[room].rematchRequests === 2) {
+        games[room] = new Board(cards, Object.keys(clientes.sockets));
+        io.sockets.in(room).emit('start-game', games[room], room);
+      }
+    } else if(clientes.length === 2) {
       games[room] = new Board(cards, Object.keys(clientes.sockets));
       io.sockets.in(room).emit('start-game', games[room], room);
     }
-  });
-
-  socket.on('leave', room => {
-    socket.leave(room);
   });
 
   socket.on('click', id => {
@@ -57,8 +60,12 @@ io.on('connection', socket => {
         const winner = game.checkIfFinish();
         
         if(winner) {
-          const sockets = Object.values(io.in(room).connected);
-          sockets.map(sock => sock.id === winner ? sock.emit('won') : sock.emit('lose'));
+          io.in(room).clients((error, clients) => {
+            if(error) throw error;
+      
+            clients.map(socketId => io.sockets.sockets[socketId])
+                   .forEach(sock => sock.id === winner ? sock.emit('won') : sock.emit('lose'));
+          });
         }
       } else {
         io.sockets.in(room).emit('unflip', activeCards.map(card => card.id));
@@ -68,9 +75,20 @@ io.on('connection', socket => {
     }
   });
 
-  socket.on('disconnect', () => {
+  socket.on('player-left', playerLeft);
+  socket.on('disconnect', playerLeft);
+
+  function playerLeft () {
     socket.leaveAll();
-  });
+    io.sockets.in(userRoom).emit('enemy-left');
+    delete games[userRoom];
+  
+    io.in(userRoom).clients((error, clients) => {
+      if(error) throw error;
+
+      clients.forEach(socketId => io.sockets.sockets[socketId].leave(userRoom));
+    })
+  }
 });
 
 Http.listen(process.env.PORT || 3000);
