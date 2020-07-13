@@ -34,6 +34,11 @@ module.exports = {
               test: /\.(wav|mp3)$/,
               use: ['file-loader'] 
             },
+            {
+              exclude: /node_modules/,
+              test: /\.svg$/,
+              loader: 'svg-inline-loader'
+            }
         ]
     },
     output: {
