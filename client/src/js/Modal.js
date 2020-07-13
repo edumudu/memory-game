@@ -30,9 +30,10 @@ class Modal {
     this.hide();
   }
 
-  show() {
+  show(bg = 'rgba(0,0,0,0.7)') {
     this.#visible = true;
     this.#overlay.style.display = 'flex';
+    this.#overlay.style.backgroundColor = bg
   }
 
   hide() {

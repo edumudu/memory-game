@@ -1,4 +1,5 @@
 import '../scss/app.scss';
+import loaderSvg from '../assets/svgs/loader.svg';
 import '@fortawesome/fontawesome-free/js/all';
 import Board from './Game/Board';
 import Modal from './Modal';
@@ -13,15 +14,17 @@ let room;
 
 menu.setAction('<i class="fas fa-play"></i>', () => {
   socket.emit('room');
-  menu.setTitle('Waiting for other player')
+  menu.setTitle('Waiting for other player');
+  menu.setContent(loaderSvg);
   menu.disableAction(0);
 });
-menu.show();
+
+menu.show('black');
 
 modal.setAction('<i class="fas fa-undo-alt"></i>', () => {
   socket.emit('room', room);
   modal.hide();
-  menu.show();
+  menu.show('black');
   game.destroy();
 }, 'success', 'Rematch');
 
@@ -29,7 +32,7 @@ modal.setAction('<i class="fas fa-play"></i>', () => {
   socket.emit('player-left');
   socket.emit('room');
   modal.hide();
-  menu.show();
+  menu.show('black');
   game.destroy();
 }, '', 'New game');
 
@@ -38,13 +41,14 @@ socket.on('start-game', (board, playerRoom) => {
   game = new Board(el, board, socket.id);
   game.setPlayerTurn(board.playerOfTheTime);
   menu.hide();
+  menu.setContent('');
 
   socket.on('enemy-left', () => {
     game.destroy();
     modal.hide();
     menu.setTitle('Enemy left the room');
     menu.enableAction(0);
-    menu.show();
+    menu.show('black');
   })
 
   socket.on('check', ids => {
