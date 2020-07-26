@@ -5,12 +5,12 @@ import Board from './Game/Board';
 import Modal from './Modal';
 import socket from './io';
 
-const el = document.querySelector('#board');
+const el = document.querySelector('#board') as HTMLElement;
 const modal = new Modal('#modal');
 const menu = new Modal('#menu');
 
-let game;
-let room;
+let game : Board;
+let room : string;
 
 menu.setAction('<i class="fas fa-play"></i>', () => {
   socket.emit('room');
@@ -36,7 +36,7 @@ modal.setAction('<i class="fas fa-play"></i>', () => {
   game.destroy();
 }, '', 'New game');
 
-socket.on('start-game', (board, playerRoom) => {
+socket.on('start-game', (board : any, playerRoom : string) => {
   room = playerRoom;
   game = new Board(el, board, socket.id);
   game.setPlayerTurn(board.playerOfTheTime);
@@ -51,19 +51,19 @@ socket.on('start-game', (board, playerRoom) => {
     menu.show('black');
   })
 
-  socket.on('check', ids => {
+  socket.on('check', (ids : string[]) => {
     game.check(ids);
   })
   
-  socket.on('flip', id => {
+  socket.on('flip', (id : string) => {
     game.flip(id);
   });
   
-  socket.on('unflip', ids => {
+  socket.on('unflip', (ids : string[]) => {
     setTimeout(() => game.unflip(ids), 800)
   });
   
-  socket.on('hits', scoreboard => {
+  socket.on('hits', (scoreboard : Record<string, number>) => {
     game.setScoreboard(scoreboard);
   });
   
@@ -79,7 +79,7 @@ socket.on('start-game', (board, playerRoom) => {
     modal.show();
   });
   
-  socket.on('toggle-player', player => {
+  socket.on('toggle-player', (player : string) => {
     game.setPlayerTurn(player);
   })
 })
