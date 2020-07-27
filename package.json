@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "cd server && yarn && yarn build",
-    "start": "cd server && yarn start"
+    "start": "cd server && yarn start",
+    "build": "cd server && yarn build"
   }
 }
