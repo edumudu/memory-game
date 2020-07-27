@@ -1,6 +1,6 @@
 // Simulate a API request
 
-module.exports = [
+export default [
   { icon: 'fas spider' },
   { icon: 'fas otter' },
   { icon: 'fas hippo' },
@@ -12,4 +12,4 @@ module.exports = [
   { icon: 'fas dove' },
   { icon: 'fas cat' },
   { icon: 'fas crow' },
-]
+];

@@ -1,5 +1,20 @@
+import { CardJSON, CardAPI } from "../@types";
+
+interface ScoreBoard extends Record<string, number>{
+  total : number;
+}
+
 class Board {
-  constructor (cards, players) {
+  private elapsedTime : number;
+  private cards : CardJSON[];
+  private players : string[];
+  private activesCards : CardJSON[];
+  private matches : CardJSON[];
+  public scoreboard : ScoreBoard;
+  public rematchRequests : number;
+  public playerOfTheTime : string;
+
+  constructor (cards : CardAPI[], players : string[]) {
     this.elapsedTime = 0;
     this.cards = this.shuffle([...cards, ...cards].map(card => ({ ...card })));
     this.players = players;
@@ -11,17 +26,20 @@ class Board {
     this.playerOfTheTime = players[Math.floor(Math.random() * 2)];
   }
 
-  shuffle (cards) {
-    return cards.map(card => {
+  private shuffle (cards : CardAPI[]) : CardJSON[] {
+    return cards.map(({ icon }) => {
       const randomNumber = Math.floor(Math.random() * cards.length);
-      card.order = randomNumber;
-      card.id = `_${Math.random().toString(36).substr(2, 9)}`;
-
+      const card : CardJSON = {
+        icon,
+        order: randomNumber,
+        id: `_${Math.random().toString(36).substr(2, 9)}`
+      };
+      
       return card;
     });
   }
 
-  click (id) {
+  public click (id : string) : CardJSON[] {
     const card = this.cards.find(card => card.id === id);
     
     if(!card || !this.checkIfCanFlip(id) || this.activesCards.length >= 2) return this.activesCards;
@@ -31,7 +49,7 @@ class Board {
     return this.activesCards;
   }
 
-  checkIfMatch () {
+  public checkIfMatch () : boolean {
     const [first, second] = this.activesCards;
     const isMatch = first.icon === second.icon;
 
@@ -41,14 +59,14 @@ class Board {
     return isMatch;
   }
 
-  checkIfCanFlip (id) {
+  public checkIfCanFlip (id : string) : boolean {
     const containInActives = this.activesCards.some(card => card.id === id);
     const containInMatches = this.matches.some(card => card.id === id);
 
     return !(containInActives || containInMatches)
   }
 
-  checkIfFinish () {
+  public checkIfFinish () : boolean | string {
     if(this.scoreboard.total === this.cards.length / 2) {
       return this.players.reduce((winner, client) => this.scoreboard[client] > this.scoreboard[winner] ? client : winner);
     }
@@ -56,15 +74,15 @@ class Board {
     return false;
   }
 
-  incrementHits () {
+  public incrementHits () : void {
     const score = this.scoreboard[this.playerOfTheTime]
     this.scoreboard[this.playerOfTheTime] = (score || 0) + 1;
     this.scoreboard.total++;
   }
 
-  togglePlayer () {
-    this.playerOfTheTime = this.players.find(player => player !== this.playerOfTheTime);
+  public togglePlayer () : void {
+    this.playerOfTheTime = this.players.find(player => player !== this.playerOfTheTime) || '';
   }
 }
 
-module.exports = Board;
+export default Board;
