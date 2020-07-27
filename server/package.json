@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --watch '*.ts' --exec 'ts-node' app.ts",
     "start": "node ./dist/app.js",
-    "build": "tsc -p tsconfig.json"
+    "build": "./node_modules/typescript/bin/tsc -p tsconfig.json"
   },
   "dependencies": {
     "express": "^4.17.1",
