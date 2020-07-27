@@ -1,14 +1,17 @@
-const Express = require('express')();
-const Http = require('http').Server(Express);
-const io = require('socket.io')(Http);
+import Express from 'express';
+import Http from 'http';
+import socket, { Packet } from 'socket.io';
 
-const cards = require('./src/data/cards');
-const Board = require('./src/Board');
+const app = new Http.Server(Express());
+const io = socket(app);
 
-const games = {};
+import cards from './src/data/cards';
+import Board from './src/Board';
+
+const games : Record<string, Board> = {};
 
 io.on('connection', socket => {
-  let userRoom;
+  let userRoom : string;
 
   socket.on('room', room => {
     const rooms = io.sockets.adapter.rooms;
@@ -60,7 +63,7 @@ io.on('connection', socket => {
         const winner = game.checkIfFinish();
         
         if(winner) {
-          io.in(room).clients((error, clients) => {
+          io.in(room).clients((error : Packet, clients : string[]) => {
             if(error) throw error;
       
             clients.map(socketId => io.sockets.sockets[socketId])
@@ -83,7 +86,7 @@ io.on('connection', socket => {
     io.sockets.in(userRoom).emit('enemy-left');
     delete games[userRoom];
   
-    io.in(userRoom).clients((error, clients) => {
+    io.in(userRoom).clients((error : Packet, clients : string[]) => {
       if(error) throw error;
 
       clients.forEach(socketId => io.sockets.sockets[socketId].leave(userRoom));
@@ -91,4 +94,4 @@ io.on('connection', socket => {
   }
 });
 
-Http.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3000);

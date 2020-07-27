@@ -60,9 +60,13 @@ class Scoreboard {
 
   public initValues() : void {
     const { scoreboard, myHits, enemyHits } = this.els;
+    const { enemy, my } = this.hits;
 
     myHits.classList.add('hits', 'my-hits');
     enemyHits.classList.add('hits', 'enemy-hits');
+
+    this.myHits = my;
+    this.enemyHits = enemy;
     
     scoreboard.append(myHits, enemyHits);
   }
