@@ -1,12 +1,26 @@
 import Card from './Card';
 import Scoreboard from './Scoreboard';
 import AudioController from './AudioController';
+import { CardJSON } from '../../../@types';
 
 class Board {
-  #board;
+  private board : HTMLElement;
+  private timer: HTMLDivElement;
+  private playerTurnEl: HTMLDivElement;
+  private cards : Card[];
+  private me : string;
+  private players : string[];
+  private elapsedTime : number;
+  private timerInterval : NodeJS.Timeout;
+  private AudioController : AudioController;
+  private scoreboard : Scoreboard;
 
-  constructor(el, { elapsedTime, cards, players }, me) {
-    this.#board = el;
+  constructor(
+    el : HTMLElement,
+    { elapsedTime, cards, players } : { elapsedTime: number, cards: CardJSON[], players: string[] },
+    me : string
+  ) {
+    this.board = el;
     this.me = me;
     this.elapsedTime = elapsedTime;
     this.players = players;
@@ -19,66 +33,67 @@ class Board {
     this.playerTurnEl.classList.add('player-turn');
 
     this.AudioController = new AudioController;
+    this.scoreboard = new Scoreboard;
 
     this.timer.classList.add('timer');
-    document.querySelector('#game-info').append(this.timer, this.playerTurnEl);
+    document.querySelector('#game-info')?.append(this.timer, this.playerTurnEl);
     
+    this.timerInterval = this.startTimer();
+
     this.insertCardsInBoard();
     this.initScoreBoard();
-    this.startTimer();
   }
 
-  initScoreBoard() {
-    this.scoreboard = new Scoreboard();
-    document.querySelector('#game-info').appendChild(this.scoreboard.el);
+  private initScoreBoard() : void {
+    document.querySelector('#game-info')?.appendChild(this.scoreboard.el);
   }
 
-  startTimer() {
-    this.timerInterval = setInterval(() => {
+  private startTimer() : NodeJS.Timeout {
+    return setInterval(() => {
       this.elapsedTime++;
       this.timer.textContent = `Time ${this.elapsedTime}`;
     }, 1000);
   }
 
-  insertCardsInBoard() {
-    this.cards.forEach(card => this.#board.appendChild(card.toNode()));
+  private insertCardsInBoard() : void {
+    this.cards.forEach(card => this.board.appendChild(card.toNode()));
   }
 
-  removeCardsFromBoard() {
-    this.cards.forEach(card => this.#board.removeChild(card.toNode()));
+  private removeCardsFromBoard() : void {
+    this.cards.forEach(card => this.board.removeChild(card.toNode()));
   }
 
-  flip (id) {
+  public flip (id : string) : void {
     const card = this.cards.find(card => id === card.id);
-    card.flip();
+    card?.flip();
   }
 
-  unflip (ids) {
+  public unflip (ids : string[]) : void {
     const cards = this.cards.filter(card => ids.includes(card.id));
     cards.forEach(card => card.unflip());
   }
 
-  check(ids) {
+  public check(ids : string[]) : void {
     const cards = this.cards.filter(card => ids.includes(card.id));
     cards.forEach(card => card.markAsMatched());
     this.AudioController.match();
   }
 
-  setScoreboard (score) {
+  public setScoreboard (score : Record<string, number>) : void {
     this.players.forEach(player => {
       this.scoreboard[player === this.me ? 'myHits' : 'enemyHits'] = score[player] || 0;
     })
   }
 
-  setPlayerTurn(playerOfTheTime) {
+  public setPlayerTurn(playerOfTheTime : string) : void {
     this.playerTurnEl.textContent = playerOfTheTime === this.me ? 'Your turn' : 'Enemy turn';
   }
 
-  stopTimers() {
+  public stopTimers() : void {
     clearInterval(this.timerInterval);
   }
 
-  destroy () {
+  public destroy () : void {
     this.removeCardsFromBoard();
     this.scoreboard.destroy();
     this.stopTimers();

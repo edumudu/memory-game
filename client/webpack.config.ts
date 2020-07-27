@@ -1,19 +1,24 @@
-const HTMLWebpackPlugin = require('html-webpack-plugin')
-const path = require('path')
-const webpack = require('webpack')
+import HTMLWebpackPlugin from 'html-webpack-plugin';
+import path from 'path';
+import webpack from 'webpack';
 
-const PUBLIC_DIR = 'public'
+const PUBLIC_DIR : string = 'public'
 
-module.exports = {
+const config : webpack.Configuration = {
     devServer: {
         contentBase: path.join(__dirname, PUBLIC_DIR),
         hot: true,
         port: 3030
     },
-    entry: path.resolve(__dirname, 'src', 'js','main.js'),
+    entry: path.resolve(__dirname, 'src', 'js','main.ts'),
     mode: 'development',
     module: {
         rules: [
+            {
+              exclude: /node_modules/,
+              loader: 'ts-loader',
+              test: /\.ts$/,
+            },
             {
                 exclude: /node_modules/,
                 loader: 'babel-loader',
@@ -51,5 +56,10 @@ module.exports = {
         }),
         new webpack.HotModuleReplacementPlugin(),
     ],
-    target: 'web'
+    target: 'web',
+    resolve: {
+      extensions: ['.ts', '.js', '.json']
+    }
 }
+
+export default config;
