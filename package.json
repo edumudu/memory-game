@@ -5,7 +5,8 @@
   "author": "Eduardo Wesley <eduardomudutiu@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "postinstall": "yarn build",
-    "start": "cd server && yarn start"
+    "postinstall": "cd server && yarn",
+    "start": "cd server && yarn start",
+    "build": "cd server && yarn build"
   }
 }
