@@ -1,0 +1,28 @@
+name: Deploy
+
+on:
+  push: 
+    branches: 
+     - master
+
+jobs:
+  built-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set-up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "10.x"
+      - name: Set-up Yarn
+        uses: borales/actions-yarn@v2.0.0
+      - run: cd client
+      - run: yarn --prod
+      - name: Deploy
+        uses: crazy-max/ghaction-github-pages@v1
+        with:
+          target_branch: gh-pages
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_REPO_TOKEN }}
