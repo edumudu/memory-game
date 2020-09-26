@@ -1,17 +1,21 @@
 import Express from 'express';
-import Http from 'http';
-import socket, { Packet } from 'socket.io';
-
-const app = new Http.Server(Express());
-const io = socket(app);
+import { createServer } from 'http';
+import socketio, { Packet } from 'socket.io';
 
 import cards from './src/data/cards';
 import Board from './src/Board';
 
-const games : Record<string, Board> = {};
+const app = createServer(Express());
+const io = socketio(app);
+let players: string[] = [];
+
+const games: Record<string, Board> = {};
 
 io.on('connection', socket => {
-  let userRoom : string;
+  let userRoom: string;
+
+  players.push(socket.id);
+  io.sockets.emit('update-online-players', players.length);
 
   socket.on('room', room => {
     const rooms = io.sockets.adapter.rooms;
@@ -78,10 +82,7 @@ io.on('connection', socket => {
     }
   });
 
-  socket.on('player-left', playerLeft);
-  socket.on('disconnect', playerLeft);
-
-  function playerLeft () {
+  const playerLeft = () => {
     socket.leaveAll();
     io.sockets.in(userRoom).emit('enemy-left');
     delete games[userRoom];
@@ -92,6 +93,14 @@ io.on('connection', socket => {
       clients.forEach(socketId => io.sockets.sockets[socketId].leave(userRoom));
     })
   }
+
+  socket.on('player-left', playerLeft);
+
+  socket.on('disconnect', () => {
+    playerLeft();
+    players = players.filter(id => id !== socket.id);
+    socket.broadcast.emit('update-online-players', players.length);
+  });
 });
 
 app.listen(process.env.PORT || 3000);

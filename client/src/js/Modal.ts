@@ -1,7 +1,8 @@
 declare interface ModalNodes {
-  title : HTMLElement,
-  content : HTMLParagraphElement,
-  actions : HTMLDivElement,
+  title: HTMLElement,
+  content: HTMLParagraphElement,
+  actions: HTMLDivElement,
+  playersOnline: HTMLSpanElement,
 }
 
 class Modal {
@@ -17,17 +18,20 @@ class Modal {
     <div class="actions"></div>
   `;
 
-  public constructor(el : string | HTMLElement) {
+  public constructor(el: string | HTMLElement) {
     const overlay = document.createElement('div');
+    const playerOnlineCounter = document.createElement('span');
 
     el = document.querySelector(el as string) as HTMLElement;
 
+    playerOnlineCounter.classList.add('players-online');
     overlay.classList.add('modal-overlay');
 
     el.classList.add('modal');
     el.innerHTML = this.template;
     el.parentNode?.appendChild(overlay);
-    overlay.appendChild(el);    
+    overlay.appendChild(playerOnlineCounter);
+    overlay.appendChild(el);
     
     this.el = el;
     this.overlay = overlay;
@@ -58,6 +62,7 @@ class Modal {
       title: el.querySelector('.title') as HTMLElement,
       content: el.querySelector('.content') as HTMLParagraphElement,
       actions: el.querySelector('.actions') as HTMLDivElement,
+      playersOnline: this.overlay.querySelector('.players-online') as HTMLSpanElement,
     }
   }
 
@@ -94,6 +99,10 @@ class Modal {
 
   public setContent(html : string) : void {
     this.modalNodes.content.innerHTML = html;
+  }
+
+  public updateUsersOnline(quantity: number): void {
+    this.modalNodes.playersOnline.textContent = `${quantity} ${quantity > 1 ? 'players' : 'player'} online :)`;
   }
 }
 

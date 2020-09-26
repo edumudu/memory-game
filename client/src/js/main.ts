@@ -36,6 +36,10 @@ modal.setAction('<i class="fas fa-play"></i>', () => {
   game.destroy();
 }, '', 'New game');
 
+socket.on('update-online-players', (quantity: number) => {
+  menu.updateUsersOnline(quantity);
+});
+
 socket.on('start-game', (board : any, playerRoom : string) => {
   room = playerRoom;
   game = new Board(el, board, socket.id);
