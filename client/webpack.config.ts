@@ -4,14 +4,14 @@ import webpack from 'webpack';
 
 const PUBLIC_DIR : string = 'public'
 
-const config : webpack.Configuration = {
+const config: webpack.Configuration = {
     devServer: {
         contentBase: path.join(__dirname, PUBLIC_DIR),
         hot: true,
         port: 3030
     },
     entry: path.resolve(__dirname, 'src', 'js','main.ts'),
-    mode: 'development',
+    mode: process.env.NODE_ENV as 'development' | 'production',
     module: {
         rules: [
             {

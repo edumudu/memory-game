@@ -41,7 +41,7 @@ class Card {
   }
 
   click() : void {
-    socket.emit('click', this.hashId);
+    socket.emit('game:click', this.hashId);
   }
 
   addClick() : void {

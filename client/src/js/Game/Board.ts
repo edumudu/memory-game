@@ -60,7 +60,11 @@ class Board {
   }
 
   private removeCardsFromBoard() : void {
-    this.cards.forEach(card => this.board.removeChild(card.toNode()));
+    this.cards.forEach(card => {
+      const cardNode = card.toNode();
+
+      this.board.contains(cardNode) && this.board.removeChild(card.toNode());
+    });
   }
 
   public flip (id : string) : void {
