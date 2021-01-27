@@ -66,16 +66,23 @@ class Board {
     return !(containInActives || containInMatches)
   }
 
-  public checkIfFinish () : boolean | string {
-    if(this.scoreboard.total === this.cards.length / 2) {
-      return this.players.reduce((winner, client) => this.scoreboard[client] > this.scoreboard[winner] ? client : winner);
-    }
+  public checkCanIfFinish () : boolean | string {
+    return this.scoreboard.total === this.cards.length / 2;
+  }
 
-    return false;
+  public getPlacing(): Record<string, string> {
+    const { total, ...scores } = this.scoreboard;
+    const winnerScore = Math.max(...Object.values(scores));
+    
+    return {
+      winner: this.players.find(player => this.scoreboard[player] === winnerScore) || '',
+      loser: this.players.find(player => this.scoreboard[player] !== winnerScore) || '',
+    }
   }
 
   public incrementHits () : void {
-    const score = this.scoreboard[this.playerOfTheTime]
+    const score = this.scoreboard[this.playerOfTheTime];
+
     this.scoreboard[this.playerOfTheTime] = (score || 0) + 1;
     this.scoreboard.total++;
   }
