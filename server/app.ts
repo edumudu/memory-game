@@ -11,11 +11,11 @@ const isProduction = process.env.NODE_ENV === 'production';
 const app = Express();
 const http = createServer(app);
 const io = new Server(http, {
-  cors: { origin: isProduction ? 'https://edumudu.github.io/memory-game/' : '*' }
+  cors: { origin: isProduction ? 'https://edumudu.github.io' : '*' }
 });
 
 app.use(cors({
-  origin: isProduction ? 'https://edumudu.github.io/memory-game/' : '*',
+  origin: isProduction ? 'https://edumudu.github.io' : '*',
 }));
 
 app.get('/', (req, res) => {
