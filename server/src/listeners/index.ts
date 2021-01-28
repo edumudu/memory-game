@@ -16,7 +16,7 @@ export default (io: Server, socket: Socket, gameManager: GameManager) => {
     }
 
     files.map(fileName => {
-      if(fileName !== 'index.ts') {
+      if(!/index.[j,t]s/.test(fileName)) {
         console.debug(`Initializing listener at: ${fileName}`);
         // Requires all the files in the directory that is not a index.js.
         const listener: (io: Server, socket: Socket, gameManager: GameManager) => void = require(resolve(__dirname, fileName)).default;
