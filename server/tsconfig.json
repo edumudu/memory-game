@@ -15,6 +15,7 @@
     "forceConsistentCasingInFileNames": true,
     "types": [
       "node",
+      "express",
       "socket.io"
     ]
   }
