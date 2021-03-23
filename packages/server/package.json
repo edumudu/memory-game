@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "@memory-game/server",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
