@@ -4,9 +4,9 @@
   "repository": "git@github.com:edumudu/memory-game.git",
   "author": "Eduardo Wesley <eduardomudutiu@gmail.com>",
   "license": "MIT",
-  "scripts": {
-    "postinstall": "cd server && yarn",
-    "start": "cd server && yarn start",
-    "build": "cd server && yarn build"
-  }
+  "private": true,
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  },
+  "workspaces": ["packages/*"]
 }

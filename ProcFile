@@ -1,1 +1,1 @@
-web: yarn start
+web: lerna run --scope @memory-game/server start
