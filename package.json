@@ -5,6 +5,9 @@
   "author": "Eduardo Wesley <eduardomudutiu@gmail.com>",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "start:heroku": "lerna run --scope @memory-game/server build && lerna run --scope @memory-game/server start"
+  },
   "devDependencies": {
     "lerna": "^4.0.0"
   },
